@@ -3,7 +3,7 @@ import logging
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 
-from sklearn.datasets import fetch_california_housing, load_iris, load_boston
+from sklearn.datasets import fetch_california_housing, load_iris
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans as Sklearn_KMeans
@@ -83,10 +83,7 @@ def model_and_data_pdp(spark_session):
     houses_pd_df['target'] = houses['target']
     iris_pd_df = pd.DataFrame(iris['data'], columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
     iris_pd_df['target'] = iris['target']
-    boston_pd_df = pd.DataFrame(boston['data'], columns=boston['feature_names'])
-    boston_pd_df['target'] = boston['target']
-    boston_pd_df['CHAS'] = boston_pd_df['CHAS'].astype(int)
-    boston_pd_df['RAD'] = boston_pd_df['RAD'].astype(int)
+    boston_pd_df = pd.read_csv("model_and_data/boston.csv")
 
     houses_sp_df = spark_sess.createDataFrame(houses_pd_df)
     iris_sp_df = spark_sess.createDataFrame(iris_pd_df)
