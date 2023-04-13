@@ -1,0 +1,6 @@
+# Dockerfile for testing purposes.
+# An image from this Dockerfile will be built during CI pipeline execution,
+# so tests and other QA stages will be evaluated within a deterministic context
+
+# FROM globaldevtools.bbva.com:5000/datio-spark/engine/global/fjwam/dataproc-python:0.1.0
+FROM globaldevtools.bbva.com:5000/datio-spark/engine/global/fjwam/dataproc-pyspark:1.5.6-2.4
