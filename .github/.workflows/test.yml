@@ -2,9 +2,9 @@ name: Mercury-Explainability
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "master", "develop" ]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "master", "develop" ]
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --max-line-length=127 --statistics
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --max-line-length=140 --statistics
     - name: Test with pytest
       run: |
         pytest
