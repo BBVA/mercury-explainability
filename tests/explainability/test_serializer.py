@@ -10,9 +10,9 @@ import os
 
 @pytest.fixture(scope="session")
 def model_and_data():
-    logRegModel = pickle.load(open('./tests/explainability/model_and_data/FICO_lr_model.pkl', 'rb'))
-    fit_data = pd.read_csv('./tests/explainability/model_and_data/fit_data_red.csv', index_col=0)
-    explain_data = pd.read_csv('./tests/explainability/model_and_data/explain_data.csv', index_col=0)
+    logRegModel = pickle.load(open('tests/explainability/model_and_data/FICO_lr_model.pkl', 'rb'))
+    fit_data = pd.read_csv('tests/explainability/model_and_data/fit_data_red.csv', index_col=0)
+    explain_data = pd.read_csv('tests/explainability/model_and_data/explain_data.csv', index_col=0)
     return {
         'logRegModel': logRegModel,
         'fit_data': fit_data,
@@ -45,3 +45,5 @@ def test_serializer_explainer(model_and_data):
     anchorsExtendedExplainer_recovered = MercuryExplainer.load(TEST_FILE)
     assert type(anchorsExtendedExplainer_recovered) ==\
          AnchorsWithImportanceExplainer, "Bad load"
+    
+    os.remove(TEST_FILE)

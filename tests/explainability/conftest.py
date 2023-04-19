@@ -37,9 +37,9 @@ def spark_session(spark_context):
 
 @pytest.fixture(scope="module")
 def model_and_data(spark_session):
-    gbtModel = GBTClassificationModel.load('./tests/explainability/model_and_data_pyspark/gbtModelPySpark')
-    assembler = VectorAssembler.load('./tests/explainability/model_and_data_pyspark/assemblerScaled')
-    data_pd = pd.read_csv('./tests/explainability/model_and_data_pyspark/data_pandas_red.csv', index_col=0)
+    gbtModel = GBTClassificationModel.load('tests/explainability/model_and_data_pyspark/gbtModelPySpark')
+    assembler = VectorAssembler.load('tests/explainability/model_and_data_pyspark/assemblerScaled')
+    data_pd = pd.read_csv('tests/explainability/model_and_data_pyspark/data_pandas_red.csv', index_col=0)
     data_pyspark = spark_session.createDataFrame(data_pd)
     data_preproc = assembler.transform(data_pyspark)
     return {
@@ -52,9 +52,9 @@ def model_and_data(spark_session):
 
 @pytest.fixture(scope='module')
 def model_and_data_ale(spark_session):
-    gbtModel = GBTClassificationModel.load('./tests/explainability/model_and_data_pyspark/gbtModelPySpark')
-    assembler = VectorAssembler.load('./tests/explainability/model_and_data_pyspark/assemblerScaled')
-    data_pd = pd.read_csv('./tests/explainability/model_and_data_pyspark/data_ale.csv', index_col=0)
+    gbtModel = GBTClassificationModel.load('tests/explainability/model_and_data_pyspark/gbtModelPySpark')
+    assembler = VectorAssembler.load('tests/explainability/model_and_data_pyspark/assemblerScaled')
+    data_pd = pd.read_csv('tests/explainability/model_and_data_pyspark/data_ale.csv', index_col=0)
     data_pyspark = spark_session.createDataFrame(data_pd)
     data_preproc = assembler.transform(data_pyspark)
     return {
@@ -77,13 +77,12 @@ def model_and_data_pdp(spark_session):
 
     iris = load_iris()
     houses = fetch_california_housing()
-    boston = boston = load_boston()
 
     houses_pd_df = pd.DataFrame(houses['data'], columns=houses['feature_names'])
     houses_pd_df['target'] = houses['target']
     iris_pd_df = pd.DataFrame(iris['data'], columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
     iris_pd_df['target'] = iris['target']
-    boston_pd_df = pd.read_csv("model_and_data/boston.csv")
+    boston_pd_df = pd.read_csv("tests/explainability/model_and_data/boston.csv")
 
     houses_sp_df = spark_sess.createDataFrame(houses_pd_df)
     iris_sp_df = spark_sess.createDataFrame(iris_pd_df)
