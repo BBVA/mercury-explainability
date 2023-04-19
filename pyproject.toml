@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "numpy", "Cython"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -18,19 +18,20 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  'pandas',
+  'pandas<2.0.0',
   'numpy>=1.13.1',
   'bokeh>=0.12.13',
   'simanneal>=0.4.1',
   'shap<0.36',
   'dill>=0.3.1',
   'Cython',
-  'graphviz'
+  'graphviz',
+  'alibi<0.5.8'
 ]
 
 [project.optional-dependencies]
 dev = [
-  'pyspark>=2.4.3',
+  'pyspark>=3.0.2',
   'pytest',
   'flake8',
   'scikit-learn',

@@ -13,9 +13,8 @@ site_dir: site
 nav:
 - Home: index.md
 - Api:
-  - base tests: reference/basetests.md
-  - data tests: reference/data_tests.md
-  - model tests: reference/model_tests.md
+  - explainers: reference/explainers.md
+  - explanations: reference/explanations.md
 markdown_extensions:
 - codehilite
 - admonition
@@ -38,5 +37,5 @@ plugins:
           merge_init_into_class: true
           docstring_style: google
     watch:
-    - mercury/robust
+    - mercury/explainability
 dev_addr: 0.0.0.0:8080
