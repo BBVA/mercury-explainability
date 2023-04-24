@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61.0", "numpy", "Cython"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mercury-explainability"
+license = {file = "LICENSE.txt"}
+version = "0.0.1"
+authors = [
+  { name="Mercury Team", email="mercury.group@bbva.com" },
+]
+description = "Mercury's explainability is a library with implementations of different state-of-the-art methods in the field of explainability"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  'pandas<2.0.0',
+  'numpy>=1.13.1',
+  'bokeh>=0.12.13',
+  'simanneal>=0.4.1',
+  'shap<0.36',
+  'dill>=0.3.1',
+  'Cython',
+  'graphviz',
+  'alibi<0.5.8'
+]
+
+[project.optional-dependencies]
+dev = [
+  'pyspark>=3.0.2',
+  'pytest',
+  'flake8',
+  'scikit-learn',
+]
+doc = [
+  'mkdocs',
+  'mkdocstrings[python]',
+  'mkdocs-material',
+  'mkdocs-minify-plugin==0.5.0',
+  'mkdocs-exclude',
+  'nbconvert',
+]
+
+[tool.setuptools.packages.find]
+include = ["mercury*"]
+exclude = ["docs*", "tests*", "tutorials"]
+
+
+[project.urls]
+"Homepage" = "https://github.com/BBVA/mercury-explainability"
+"Bug Tracker" = "https://github.com/BBVA/mercury-explainability/issues"
