@@ -101,6 +101,29 @@ def test_spark_classification(model_and_data_pdp):
     explanation.plot(filter_classes=[True, False, True], quantiles=[True, False, True])
 
 
+def test_spark_regression(model_and_data_pdp):
+    rf = model_and_data_pdp['rf_houses_sp']
+    assembler = model_and_data_pdp['assembler_houses']
+    features = model_and_data_pdp['houses_sp_df']
+
+    def my_pred_fn(data):
+        temp_df = assembler.transform(data)
+        return rf.transform(temp_df)
+
+    features_to_ignore = ['AveBedrms', 'Population']
+    features_to_use = [f for f in list(features.columns) if f not in
+            features_to_ignore]
+
+    explainer = PartialDependenceExplainer(my_pred_fn, output_col='prediction', verbose=True, quantiles=False)
+    explanation = explainer.explain(features, ignore_feats=features_to_ignore)
+    return_dict = explanation.data
+
+    # Explanation should contain all the non-ignored features
+    assert list(return_dict.keys()) == features_to_use
+    # Predictions should contain real numbers
+    assert len(return_dict[list(return_dict.keys())[0]]['preds'].shape) == 1
+
+
 def test_explanation_plot(model_and_data_pdp):
     rf = model_and_data_pdp['rf_boston_sk']
     features = model_and_data_pdp['boston_pd_df']
