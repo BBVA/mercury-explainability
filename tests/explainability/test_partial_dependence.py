@@ -73,6 +73,34 @@ def test_pandas_regression_with_categoricals(model_and_data_pdp):
     explanation.plot()
 
 
+def test_spark_classification(model_and_data_pdp):
+    rf = model_and_data_pdp['rf_iris_sp']
+    assembler = model_and_data_pdp['assembler_iris']
+    features = model_and_data_pdp['iris_sp_df']
+
+    def my_pred_fn(data):
+        temp_df = assembler.transform(data)
+        return rf.transform(temp_df)
+
+    features_to_ignore = ['petal_length','petal_width']
+    features_to_use = [f for f in list(features.columns) if f not in features_to_ignore]
+
+    explainer = PartialDependenceExplainer(my_pred_fn, output_col='probability')
+    explanation = explainer.explain(features, ignore_feats=features_to_ignore)
+    return_dict = explanation.data
+
+    # Explanation should contain all the non-ignored features
+    assert list(return_dict.keys()) == features_to_use
+    # Predictions should contain R^3 vectors
+    assert return_dict[list(return_dict.keys())[0]]['preds'].shape[1] == 3
+    # Quantiles should be R^3
+    assert return_dict[list(return_dict.keys())[0]]['lower_quantile'].shape[1] == 3
+    assert return_dict[list(return_dict.keys())[0]]['upper_quantile'].shape[1] == 3
+
+    # Check plotting doesnt crash
+    explanation.plot(filter_classes=[True, False, True], quantiles=[True, False, True])
+
+
 def test_explanation_plot(model_and_data_pdp):
     rf = model_and_data_pdp['rf_boston_sk']
     features = model_and_data_pdp['boston_pd_df']
