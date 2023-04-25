@@ -5,7 +5,6 @@ from ..explanations.shuffle_importance import FeatureImportanceExplanation
 
 import numpy as np
 import pandas as pd
-import pyspark
 from sklearn.preprocessing import MinMaxScaler
 
 
@@ -124,6 +123,7 @@ class ShuffleImportanceExplainer(MercuryExplainer):
         return self.eval_fn(temp, target)
 
     def __impl_pyspark(self, predictors, target, column):
+        import pyspark
         from pyspark.sql.functions import rand, row_number, monotonically_increasing_id
         from pyspark.sql.window import Window
 
