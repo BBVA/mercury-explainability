@@ -88,10 +88,6 @@ class PartialDependenceExplainer(MercuryExplainer):
         else:
             self.compute_quantiles = quantiles
 
-        # Pyspark names of float and integer datatypes
-        self.__float_typenames = set(["FloatType", "DoubleType", "DecimalType"])
-        self.__int_typenames = set(["FloatType", "DoubleType", "LongType", "IntegerType", "ShortType", "ByteType"])
-
     def explain(self,
             features: TP.Union["pandas.DataFrame", "pyspark.sql.DataFrame"],  # noqa: F821
             ignore_feats: TP.List[str] = None,
@@ -207,6 +203,20 @@ class PartialDependenceExplainer(MercuryExplainer):
         from pyspark.sql.functions import col
         from pyspark.sql import functions as sqlf
 
+        from pyspark.sql.types import (
+            FloatType,
+            DoubleType,
+            DecimalType,
+            LongType,
+            IntegerType,
+            ShortType,
+            ByteType
+        )
+
+        # Pyspark names of float and integer datatypes
+        float_pyspark_types = (FloatType, DoubleType, DecimalType)
+        int_pyspark_types = (FloatType, DoubleType, LongType, IntegerType, ShortType, ByteType)
+
         data = {}
 
         # Calculate unique values for disjoint set of columns from categoricals
@@ -215,7 +225,6 @@ class PartialDependenceExplainer(MercuryExplainer):
         num_distinct_values = features.agg(
             *(sqlf.countDistinct(col(c)).alias(c) for c in cols_to_check)
         ).collect()[0]
-        datatypes = {c: str(features.schema[c].dataType) for c in features.columns}
         minimums = features.select([sqlf.min(c).alias(c) for c in features.columns]).collect()[0]
         maximums = features.select([sqlf.max(c).alias(c) for c in features.columns]).collect()[0]
 
@@ -225,9 +234,9 @@ class PartialDependenceExplainer(MercuryExplainer):
             data[colname] = {}
             # Determine whether this column is discrete, real or categorical
             is_categorical = False
-            if datatypes[colname] in self.__float_typenames and colname not in categoricals:
+            if isinstance(features.schema[colname].dataType, float_pyspark_types) and colname not in categoricals:
                 grid = np.linspace(minimums[colname], maximums[colname])
-            elif datatypes[colname] in self.__int_typenames \
+            elif isinstance(features.schema[colname].dataType, int_pyspark_types) \
                     and num_distinct_values[colname] > self._max_categorical_values:
                 step_size = max(
                     1, np.abs((maximums[colname] - minimums[colname]) // self.resolution)

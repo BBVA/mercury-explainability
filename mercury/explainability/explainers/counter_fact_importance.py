@@ -2,6 +2,7 @@ import typing as TP
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+tf.compat.v1.disable_eager_execution()
 
 from abc import ABC
 from .explainer import MercuryExplainer
