@@ -5,7 +5,6 @@ from ..explanations.shuffle_importance import FeatureImportanceExplanation
 
 import numpy as np
 import pandas as pd
-import pyspark
 from sklearn.preprocessing import MinMaxScaler
 
 
@@ -63,14 +62,14 @@ class ShuffleImportanceExplainer(MercuryExplainer):
         ```
     """
     def __init__(self,
-                 eval_fn: Callable[[Union["pd.DataFrame", "pyspark.sql.DataFrame"], Union["np.ndarray", str]], float],
+                 eval_fn: Callable[[Union["pd.DataFrame", "pyspark.sql.DataFrame"], Union["np.ndarray", str]], float],  # noqa: F821
                  normalize: bool = True
         ):
         self.eval_fn = eval_fn
         self.normalize = normalize
 
     def explain(self,
-                predictors: Union["pd.DataFrame", "pyspark.sql.DataFrame"],
+                predictors: Union["pd.DataFrame", "pyspark.sql.DataFrame"],  # noqa: F821
                 target: Union["np.ndarray", str]
         ) -> FeatureImportanceExplanation:
         """
