@@ -1,7 +1,7 @@
 # mercury-explainability
 
 [![](https://github.com/BBVA/mercury-explainability/actions/workflows/test.yml/badge.svg)](https://github.com/BBVA/mercury-explainability)
-![](https://img.shields.io/badge/latest-0.0.2-blue)
+![](https://img.shields.io/badge/latest-0.0.3-blue)
 
 ***mercury-explainability*** is a library with implementations of different state-of-the-art methods in the field of explainability. They are designed to work efficiently and to be easily integrated with the main Machine Learning frameworks.
 
