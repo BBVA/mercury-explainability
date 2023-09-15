@@ -109,4 +109,5 @@ def test_plot_explanation(model_and_data):
     axes = plot_ale(explanation, features=features, targets=['label'], ax=ax)
 
     # Test only plot of certain features
-    plot_ale(explanation, features=features[3:6])
+    axes = plot_ale(explanation, features=features[3:6])
+    assert axes.shape == (1,3)
