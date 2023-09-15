@@ -247,3 +247,7 @@ class AnchorsWithImportanceExplainer(AnchorTabular, MercuryExplainer):
             round(100 * coverage, 2),
             round(100 * precision, 2)
         )
+    
+    def save(self, filename):
+        """Overwrite to ensure that we use MercuryExplainer.save"""
+        MercuryExplainer.save(self, filename=filename)

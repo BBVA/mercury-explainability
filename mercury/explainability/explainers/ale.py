@@ -136,6 +136,10 @@ class ALEExplainer(Explainer, MercuryExplainer):
         )
 
         return Explanation(meta=copy.deepcopy(self.meta), data=data)
+    
+    def save(self, filename):
+        """Overwrite to ensure that we use MercuryExplainer.save"""
+        MercuryExplainer.save(self, filename=filename)
 
 @no_type_check
 def plot_ale(exp: Explanation,
@@ -183,15 +187,18 @@ def plot_ale(exp: Explanation,
     fig_kw = {**default_fig_kw, **fig_kw}
 
     if features == 'all':
-        features = range(0, len(exp.feature_names))
+        selected_features = range(0, len(exp.feature_names))
     else:
+        selected_features = []
         for ix, f in enumerate(features):
             if isinstance(f, str):
                 try:
-                    exp.feature_names.index(f)
+                    selected_features.append(exp.feature_names.index(f))
                 except ValueError:
                     raise ValueError("Feature name {} does not exist.".format(f))
-    n_features = len(features)
+            elif isinstance(f, int):
+                selected_features.append(f)
+    n_features = len(selected_features)
 
     if targets == 'all':
         targets = range(0, len(exp.target_names))
@@ -243,9 +250,9 @@ def plot_ale(exp: Explanation,
 
     # make plots
     for ix, feature, ax_ravel in \
-            zip(count(), features, axes_ravel):
+            zip(count(), selected_features, axes_ravel):
         _ = _plot_one_ale_num(exp=exp,
-                              feature=ix,
+                              feature=feature,
                               targets=targets,
                               constant=constant,
                               ax=ax_ravel,
