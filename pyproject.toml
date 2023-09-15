@@ -35,6 +35,7 @@ dev = [
   'pytest',
   'flake8',
   'scikit-learn',
+  'tensorflow'
 ]
 doc = [
   'mkdocs',
