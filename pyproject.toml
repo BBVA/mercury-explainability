@@ -26,7 +26,7 @@ dependencies = [
   'dill>=0.3.1',
   'Cython',
   'graphviz',
-  'alibi<0.5.8'
+  'alibi'
 ]
 
 [project.optional-dependencies]
