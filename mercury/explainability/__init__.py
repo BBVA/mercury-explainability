@@ -10,3 +10,5 @@ from .explanations.counter_factual import CounterfactualWithImportanceExplanatio
 from .explainers import ALEExplainer
 from .explainers import AnchorsWithImportanceExplainer
 from .explainers import CounterfactualExplainer, CounterfactualProtoExplainer
+
+from .create_tutorials import create_tutorials
