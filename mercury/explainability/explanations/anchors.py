@@ -27,7 +27,7 @@ class AnchorsWithImportanceExplanation(object):
         self.explain_data = explain_data
         self.explanations = explanations
         self.categorical = categorical
-    
+
     def interpret_explanations(self, n_important_features: int) -> str:
         """
         This method prints a report of the important features obtaiend.
@@ -44,7 +44,7 @@ class AnchorsWithImportanceExplanation(object):
                 # split without an argument splits by spaces, and in every item in expl['names']
                 # the first word refers to the feature name.
                 if (
-                    (' = ' in name) or 
+                    (' = ' in name) or
                     ((len(self.categorical) > 0) and (name in [item for sublist in list(self.categorical.values()) for item in sublist]))
                     ):
                     names.append(name)
@@ -59,13 +59,13 @@ class AnchorsWithImportanceExplanation(object):
         n_explanations = 0
         for unique_name, count_name in zip(unique_names_ordered[:n_important_features], count_names_ordered[:n_important_features]):
             if n_explanations == 0:
-                print_values.append([unique_name, ' with a frequency of ', 
+                print_values.append([unique_name, ' with a frequency of ',
                     str(count_name), ' (', str(100 * count_name / len(explanations_found)), '%) '])
             elif n_explanations == n_important_features - 1:
-                print_values.append([' and ', unique_name, ' with a frequency of ', 
+                print_values.append([' and ', unique_name, ' with a frequency of ',
                     str(count_name), ' (', str(100 * count_name / len(explanations_found)), '%) '])
             else:
-                print_values.append([', ',unique_name, ' with a frequency of ', 
+                print_values.append([', ',unique_name, ' with a frequency of ',
                     str(count_name), ' (', str(100 * count_name / len(explanations_found)), '%) '])
         n_explanations += 1
         interptretation = ''.join(list(itertools.chain(*print_values)))

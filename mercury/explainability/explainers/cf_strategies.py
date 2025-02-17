@@ -206,7 +206,7 @@ class MyPriorityQueue(queue.PriorityQueue):
 
 
 class Backtracking(Strategy):
-    """ 
+    """
     Backtracking strategy.
 
     Args:
