@@ -256,11 +256,14 @@ class CounterfactualWithImportanceExplanation(object):
     Args:
         explain_data:
             A pandas DataFrame containing the observations for which an explanation has to be found.
-        explanations:
-            A list containing the results of computing the explanations for explain_data.
-        categorical:
-            A dictionary containing as key the features that are categorical and as value, the possible
-            categorical values.
+        counterfactuals:
+
+        importances:
+            A list of tuples containing the importance values of the features.
+        count_diffs:
+            A dictionary containing the count differences of the features.
+        count_diffs_norm:
+            A dictionary containing the normalized count differences of the features.
     """
 
     def __init__(

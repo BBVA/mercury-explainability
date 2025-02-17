@@ -30,14 +30,14 @@ class PartialDependenceExplanation():
         Args:
             var_name (str):
                 Name of the desired variable to plot.
+            ax (matplotlib.axes._subplots.AxesSubplot):
+                Axes object on which the data will be plotted.
             quantiles (bool or list[bool]):
                 Whether to also plot the quantiles and a shaded area between them. Useful to check whether the predictions
                 have high or low dispersion. If data doesn't contain the quantiles this parameter will be ignored.
-            filter_clases (list):
+            filter_classes (list):
                 List of bool with the classes to plot. If None, all classes will be plotted. Ignored if the target variable
                 is not categorical.
-            ax (matplotlib.axes._subplots.AxesSubplot):
-                Axes object on which the data will be plotted.
         """
         # If user pass a single bool and prediction data is a multinomial, we conver the
         # single boolean to a mask array to only plot the quantile range over the selected
@@ -164,15 +164,15 @@ class PartialDependenceExplanation():
         Args:
             ncols (int):
                 Number of columns of the summary. 1 as default.
+            figsize (tuple):
+                Size of the plotted figure
             quantiles (bool or list):
                 Whether to also plot the quantiles and a shaded area between them. Useful to check whether the predictions
                 have high or low dispersion. If this is a list of booleans, quantiles
                 will be plotted filtered by class (i.e. `quantiles[0]` = `class number 0`).
-            filter_clases (list):
+            filter_classes (list):
                 List of bool with the classes to plot. If None, all classes will be plotted. Ignored if the target variable
                 is not categorical.
-            figsize (tuple):
-                Size of the plotted figure
         """
         features = list(self.data.keys())
 

@@ -177,7 +177,7 @@ class Tree:
         Args:
             node: root of a subtree.
 
-        Returns:
+        Returns (int):
             The depth of the subtree rooted by node.
         """
         if node is None:
@@ -328,7 +328,6 @@ class ClusteringTreeExplainer(MercuryExplainer):
             When using pyspark, the clustering_model must be a fitted Pyspark Estimator containing `clusterCenters()` method (like pyspark
             Kmeans). Alternatively, you can provide a fitted Pyspark `PipelineModel` where the last stage of the pipeline contains
             the clustering algorithm and contains the `clusterCenters()' method.
-        k: number of clusters
         max_leaves: the maximum number of leaves. If max_leaves == k, then the method is the Iterative Mistake Minimization (IMM). If
             max_leaves > k, then the method to expand the tree further than k leaves is ExKMC. It cannot be max_leaves < k
         verbose: whether to show some messages during the process. If 0, it doesn't show any message. If >=1 show messages.
