@@ -62,11 +62,11 @@ class ClusteringTreeExplanation():
             while len(queue) > 0:
                 curr = queue.pop(0)
                 if curr.is_leaf():
-                    label = "%s\nsamples=\%d\nmistakes=\%d" % (str(self._get_node_split_value(curr)), curr.samples, curr.mistakes) # noqa
+                    label = "%s\nsamples=%d\nmistakes=%d" % (str(self._get_node_split_value(curr)), curr.samples, curr.mistakes)
                 else:
                     feature_name = curr.feature if feature_names is None else feature_names[curr.feature]
                     condition = "%s <= %.3f" % (feature_name, self._get_node_split_value(curr, feature_name, scalers))
-                    label = "%s\nsamples=\%d" % (condition, curr.samples) # noqa
+                    label = "%s\nsamples=%d" % (condition, curr.samples)
                     queue.append(curr.left)
                     queue.append(curr.right)
                     edges.append((id, id + len(queue) - 1))
