@@ -1,0 +1,7 @@
+pandas
+numpy
+bokeh
+simanneal
+dill
+Cython
+graphviz
