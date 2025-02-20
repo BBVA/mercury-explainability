@@ -45,7 +45,7 @@ The easiest way to install `mercury-explainability` is using ``pip``:
 This library is currently maintained by a dedicated team of data scientists and machine learning engineers from BBVA.
 
 ### Documentation
-website: https://bbva.github.io/mercury-explainability/
+website: https://bbva.github.io/mercury-explainability/site/
 
 ### Email
 mercury.group@bbva.com
