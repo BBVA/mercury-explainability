@@ -2,4 +2,4 @@
 
 | Release  | Date | Main feature(s) |
 | -------- | ---- | --------------- |
-| 1.1.4 | 2025/02/17 | Implements create_tutorials(), minore fixes, adds support for python 3.13, improves documentation. |
+| 1.1.4 | 2025/03/25 | Implements create_tutorials(), minor fixes, adds support for python 3.12, improves documentation. |
