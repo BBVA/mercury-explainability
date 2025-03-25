@@ -18,19 +18,19 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  'pandas<2.0.0',
-  'numpy>=1.13.1',
-  'bokeh>=0.12.13',
-  'simanneal>=0.4.1',
-  'shap<0.36',
-  'dill>=0.3.1',
+  'pandas',
+  'numpy',
+  'bokeh',
+  'simanneal',
+  'shap',
+  'dill',
   'Cython',
   'graphviz',
 ]
 
 [project.optional-dependencies]
 dev = [
-  'pyspark>=3.0.2',
+  'pyspark',
   'pytest',
   'flake8',
   'scikit-learn',
