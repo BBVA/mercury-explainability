@@ -3,6 +3,9 @@
 # cython: wraparound = False
 # cython: profile = False
 
+# file origin: https://github.com/navefr/ExKMC
+# copy date: 2025/02/20
+
 import numpy as np
 cimport numpy as np
 cimport cython

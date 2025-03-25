@@ -1,14 +1,21 @@
 # mercury-explainability
 
 [![](https://github.com/BBVA/mercury-explainability/actions/workflows/test.yml/badge.svg)](https://github.com/BBVA/mercury-explainability)
-![](https://img.shields.io/badge/latest-0.0.3-blue)
+![](https://img.shields.io/badge/latest-1.1.4-blue)
+[![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-3816/)
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-3916/)
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-31011/)
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3119/)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3128/)
+[![Apache 2 license](https://shields.io/badge/license-Apache%202-blue)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://github.com/BBVA/mercury-explainability/issues)
 
 ***mercury-explainability*** is a library with implementations of different state-of-the-art methods in the field of explainability. They are designed to work efficiently and to be easily integrated with the main Machine Learning frameworks.
 
 ## Mercury project at BBVA
 
 Mercury is a collaborative library that was developed by the Advanced Analytics community at BBVA. Originally, it was created as an [InnerSource](https://en.wikipedia.org/wiki/Inner_source) project but after some time, we decided to release certain parts of the project as Open Source.
-That's the case with the `mercury-explainability` package. 
+That's the case with the `mercury-explainability` package.
 
 The basic block of ***mercury-explainability*** is the `Explainer` class. Each one of the explainers in ***mercury-explainability*** offers a different method for explaining your models and often will return an `Explanation` type object containing the result of that particular explainer.
 
@@ -32,12 +39,12 @@ The easiest way to install `mercury-explainability` is using ``pip``:
 
     pip install -U mercury-explainability
 
-## Help and support 
+## Help and support
 
-This library is currently maintained by a dedicated team of data scientists and machine learning engineers from BBVA. 
+This library is currently maintained by a dedicated team of data scientists and machine learning engineers from BBVA.
 
 ### Documentation
-website: https://bbva.github.io/mercury-explainability/
+website: https://bbva.github.io/mercury-explainability/site/
 
-### Email 
+### Email
 mercury.group@bbva.com

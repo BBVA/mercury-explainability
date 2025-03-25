@@ -7,10 +7,10 @@ def run_until_timeout(timeout, fn, *args, **kwargs):
     After timeout seconds it will raise an exception.
 
     Args:
-        timeout: Number of seconds until the Exception is raised.
-        fn: Function to execute.
-        *args: args of the function fn.
-        **kwargs: keyword args passed to fn.
+        timeout (int): Number of seconds until the Exception is raised.
+        fn (callable): Function to execute.
+        *args (dict): args of the function fn.
+        **kwargs (dict): keyword args passed to fn.
 
     Example:
         >>> explanation = run_until_timeout(timeout, explainer.explain, data=data)

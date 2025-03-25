@@ -256,11 +256,14 @@ class CounterfactualWithImportanceExplanation(object):
     Args:
         explain_data:
             A pandas DataFrame containing the observations for which an explanation has to be found.
-        explanations:
-            A list containing the results of computing the explanations for explain_data.
-        categorical:
-            A dictionary containing as key the features that are categorical and as value, the possible
-            categorical values.
+        counterfactuals:
+
+        importances:
+            A list of tuples containing the importance values of the features.
+        count_diffs:
+            A dictionary containing the count differences of the features.
+        count_diffs_norm:
+            A dictionary containing the normalized count differences of the features.
     """
 
     def __init__(
@@ -298,12 +301,12 @@ class CounterfactualWithImportanceExplanation(object):
             count_diff_norm_str = '{} {:.2f}'.format(count_diffs_i[0], count_diffs_i[1])
             count_diffs_norm_str.append(count_diff_norm_str)
 
-        interptretation = """The {} most important features and their importance values according to the first metric (amount features change) are: 
+        interptretation = """The {} most important features and their importance values according to the first metric (amount features change) are:
     {}.
 
-According to the second metric (times features change), these importances are: 
+According to the second metric (times features change), these importances are:
     {}""".format(
-            n_important_features, 
+            n_important_features,
             ' AND '.join([' '.join(imp_str) for imp_str in importances_str]),
             ' AND '.join(count_diffs_norm_str)
         )

@@ -1,4 +1,4 @@
-__version__ = '0.0.3'
+__version__ = '1.1.4'
 
 from .explainers.counter_fact_basic import CounterFactualExplainerBasic
 from .explainers.shuffle_importance import ShuffleImportanceExplainer
@@ -10,3 +10,5 @@ from .explanations.counter_factual import CounterfactualWithImportanceExplanatio
 from .explainers import ALEExplainer
 from .explainers import AnchorsWithImportanceExplainer
 from .explainers import CounterfactualExplainer, CounterfactualProtoExplainer
+
+from .create_tutorials import create_tutorials

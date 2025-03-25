@@ -66,7 +66,7 @@ class CounterFactualExplainerBase(ABC):
             max_iterations:
                 Maximum number of iterations for which the regularization process runs. Defaults to 10000.
 
-            Returns:
+        Returns (tuple):
                 A tuple containing the new counterfactual, the difference between the new counterfactual and the original
                 instance and finally, the achieved probability.
         """
@@ -644,7 +644,7 @@ class CounterfactualProtoExplainer(CounterFactualExplainerBase):
         Explain instance and return counterfactual with metadata.
 
         Args:
-            X:
+            explain_data:
                 Instances to explain
             Y:
                 Labels for X as one-hot-encoding

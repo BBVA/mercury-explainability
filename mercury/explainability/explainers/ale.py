@@ -136,7 +136,7 @@ class ALEExplainer(Explainer, MercuryExplainer):
         )
 
         return Explanation(meta=copy.deepcopy(self.meta), data=data)
-    
+
     def save(self, filename):
         """Overwrite to ensure that we use MercuryExplainer.save"""
         MercuryExplainer.save(self, filename=filename)

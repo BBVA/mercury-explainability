@@ -150,7 +150,7 @@ class SimulatedAnnealing(Strategy, Annealer):
         """ Kick off Simulated Annealing.
 
         Args:
-            **kargs:
+            **kwargs (dict):
                 Simulated Annealing specific arguments
                     - tmin: min temperature
                     - tmax: max temperature
@@ -206,7 +206,7 @@ class MyPriorityQueue(queue.PriorityQueue):
 
 
 class Backtracking(Strategy):
-    """ 
+    """
     Backtracking strategy.
 
     Args:
@@ -244,7 +244,7 @@ class Backtracking(Strategy):
         """ Kick off the backtracking.
 
         Args:
-            **kwargs: Backtracking specific arguments
+            **kwargs (dict): Backtracking specific arguments
                         - max_iter: max number of iterations
 
         Returns:
