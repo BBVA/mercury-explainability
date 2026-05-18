@@ -1,4 +1,4 @@
-__version__ = '1.1.4'
+__version__ = '1.2.3'
 
 from .explainers.counter_fact_basic import CounterFactualExplainerBasic
 from .explainers.shuffle_importance import ShuffleImportanceExplainer
