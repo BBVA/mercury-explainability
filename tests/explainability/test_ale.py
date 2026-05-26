@@ -111,3 +111,8 @@ def test_plot_explanation(model_and_data):
     # Test only plot of certain features
     axes = plot_ale(explanation, features=features[3:6])
     assert axes.shape == (1,3)
+
+
+if __name__ == "__main__":
+	logging.basicConfig(level=logging.INFO)
+	pytest.main([__file__])
