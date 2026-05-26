@@ -13,8 +13,9 @@ def run_until_timeout(timeout, fn, *args, **kwargs):
         **kwargs (dict): keyword args passed to fn.
 
     Example:
+        ```python
         >>> explanation = run_until_timeout(timeout, explainer.explain, data=data)
-
+        ```
     """
     def signal_handler(signum, frame):
         raise Exception('Timeout: explanation took too long...')
@@ -31,6 +32,7 @@ from .counter_fact_basic import CounterFactualExplainerBasic
 from .shuffle_importance import ShuffleImportanceExplainer
 from .partial_dependence import PartialDependenceExplainer
 from .clustering_tree_explainer import ClusteringTreeExplainer
+from .monotonicity import MonotonicityExplainer
 from .explainer import MercuryExplainer
 
 # Classes with alibi dependencies
