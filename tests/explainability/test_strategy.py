@@ -51,3 +51,7 @@ class StrategyTests(unittest.TestCase):
 
     def test_simanneal_rosenbrock(self) -> None:
         self._strategy_with(functools.partial(self._rosenbrock, a=1, b=100), strategy='simanneal')      # type: ignore
+
+
+if __name__ == "__main__":
+	pytest.main([__file__])
