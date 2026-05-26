@@ -5,6 +5,7 @@ import pytest
 import pickle
 import tensorflow as tf
 
+
 @pytest.fixture(scope="session")
 def model_and_data():
     logRegModel = pickle.load(open('./tests/explainability/model_and_data/FICO_lr_model.pkl', 'rb'))
@@ -29,7 +30,7 @@ def test_anchors_build(model_and_data):
     logRegModel = model_and_data['logRegModel']
     fit_data = model_and_data['fit_data']
     explain_data = model_and_data['explain_data']
-    
+
     anchorsExtendedExplainer = AnchorsWithImportanceExplainer(
         predict_fn=logRegModel.predict_proba,
         train_data=fit_data,
@@ -42,7 +43,7 @@ def test_anchors_build(model_and_data):
             train_data='wrong data',
             disc_perc=[10,20,30,40,50,60,70,80,90]
         )
-    
+
     with pytest.raises(AttributeError) as excinfo:
         anchorsExtendedExplainer = AnchorsWithImportanceExplainer(
             predict_fn=logRegModel.predict_proba,
@@ -59,7 +60,7 @@ def test_anchors_fit_and_explain_precision(model_and_data):
     logRegModel = model_and_data['logRegModel']
     fit_data = model_and_data['fit_data']
     explain_data = model_and_data['explain_data']
-    
+
     anchorsExtendedExplainer = AnchorsWithImportanceExplainer(
         predict_fn=logRegModel.predict_proba,
         train_data=fit_data,
@@ -82,7 +83,7 @@ def test_anchors_fit_and_explain_coverage(model_and_data):
     logRegModel = model_and_data['logRegModel']
     fit_data = model_and_data['fit_data']
     explain_data = model_and_data['explain_data']
-    
+
     anchorsExtendedExplainer = AnchorsWithImportanceExplainer(
         predict_fn=logRegModel.predict_proba,
         train_data=fit_data,
@@ -104,7 +105,7 @@ def test_anchors_feature_importance_obtention(model_and_data):
     logRegModel = model_and_data['logRegModel']
     fit_data = model_and_data['fit_data']
     explain_data = model_and_data['explain_data']
-    
+
     anchorsExtendedExplainer = AnchorsWithImportanceExplainer(
         predict_fn=logRegModel.predict_proba,
         train_data=fit_data,
@@ -113,7 +114,7 @@ def test_anchors_feature_importance_obtention(model_and_data):
 
     np.random.seed(42)
     anchorsExplanations = anchorsExtendedExplainer.get_feature_importance(
-        explain_data.head(10), print_every=10, print_explanations=True
+        explain_data.head(10), print_every=0, print_explanations=True
     )
 
     anchorsInterpretation = anchorsExplanations.interpret_explanations(n_important_features=3)
@@ -132,7 +133,7 @@ def test_anchors_feature_importance_obtention_top_5(model_and_data):
     logRegModel = model_and_data['logRegModel']
     fit_data = model_and_data['fit_data']
     explain_data = model_and_data['explain_data']
-    
+
     anchorsExtendedExplainer = AnchorsWithImportanceExplainer(
         predict_fn=logRegModel.predict_proba,
         train_data=fit_data,
@@ -153,3 +154,7 @@ def test_anchors_feature_importance_obtention_top_5(model_and_data):
         'NetFractionRevolvingBurden' in anchorsInterpretation and
         'AverageMInFile' in anchorsInterpretation
     )
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
