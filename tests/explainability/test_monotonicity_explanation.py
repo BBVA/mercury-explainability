@@ -44,6 +44,15 @@ def test_init_with_numpy_arrays():
     np.testing.assert_array_equal(explanation.x_grid, x_grid)
     np.testing.assert_array_equal(explanation.y_curve, y_curve)
 
+
+def test_repr_contains_feature_and_nmi():
+    explanation = MonotonicityExplanation({
+        "feature": "repr_feature",
+        "nmi_value": 0.33
+    })
+
+    assert repr(explanation) == "MonotonicityExplanation(feature=repr_feature, nmi_value=0.33)"
+
 @patch('matplotlib.pyplot.figure')
 @patch('matplotlib.pyplot.plot')
 @patch('matplotlib.pyplot.title')
