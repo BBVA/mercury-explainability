@@ -166,8 +166,8 @@ class AnchorsWithImportanceExplainer(AnchorTabular, MercuryExplainer):
                 Number of top features that will be printed.
                 Defaults to 3.
             tau:
-                To be used in and passed down to the anchos explainer as defined on Alibi's documentation.
-                Used within the multi-armed bandit part of the optimisation problem.
+                To be used in and passed down to the anchors explainer as defined on Alibi's documentation.
+                Used within the multi-armed bandit part of the optimization problem.
                 Defaults to 0.15
             timeout:
                 Maximum time to be spent looking for an Anchor in seconds. A value of 0 means that no timeout
@@ -202,13 +202,8 @@ class AnchorsWithImportanceExplainer(AnchorTabular, MercuryExplainer):
 
             if print_every > 0:
                 if len(explanations) % print_every == 0:
-                    print(
-                        ("""A total of {} observations have been processed """ +
-                            """for explaining""").format(len(explanations)))
-                    print("{} anchors have already been found".format(
-                        sum([1 for explan in explanations
-                            if not isinstance(explan, str)])
-                    ))
+                    print("""A total of {} observations have been processed for explaining""").format(len(explanations))
+                    print("{} anchors have already been found".format(sum([1 for e in explanations if not isinstance(e, str)])))
         # Here we have a list with all the anchors explanations that we've been able to find.
         anchorsExtendedExplanation = AnchorsWithImportanceExplanation(
             explain_data=explain_data,

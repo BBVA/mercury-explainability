@@ -11,7 +11,7 @@ from bokeh.layouts import layout, row, column
 
 class CounterfactualBasicExplanation(object):
     """
-    A Panallet explanation.
+    A counterfactual explanation.
 
     Args:
         from_ (np.ndarray):
@@ -282,11 +282,11 @@ class CounterfactualWithImportanceExplanation(object):
 
     def interpret_explanations(self, n_important_features: int = 3) -> str:
         """
-        This method prints a report of the important features obtaiend.
+        This method prints a report of the important features obtained.
 
         Args:
             n_important_features:
-                The number of imporant features that will appear in the report.
+                The number of important features that will appear in the report.
                 Defaults to 3.
         """
 
@@ -301,14 +301,13 @@ class CounterfactualWithImportanceExplanation(object):
             count_diff_norm_str = '{} {:.2f}'.format(count_diffs_i[0], count_diffs_i[1])
             count_diffs_norm_str.append(count_diff_norm_str)
 
-        interptretation = """The {} most important features and their importance values according to the first metric (amount features change) are:
-    {}.
+        first  = ' AND '.join([' '.join(imp_str) for imp_str in importances_str])
+        second = ' AND '.join(count_diffs_norm_str)
 
-According to the second metric (times features change), these importances are:
-    {}""".format(
-            n_important_features,
-            ' AND '.join([' '.join(imp_str) for imp_str in importances_str]),
-            ' AND '.join(count_diffs_norm_str)
-        )
-        print(interptretation)
-        return interptretation
+        msg = """The {} important features and importances according to 'amount features change':
+        {}
+
+        According to 'times features change':
+        {}""".format(n_important_features, first, second)
+        print(msg)
+        return msg

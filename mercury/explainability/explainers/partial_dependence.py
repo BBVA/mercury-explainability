@@ -9,7 +9,7 @@ from mercury.explainability.explanations.partial_dependence import PartialDepend
 
 class PartialDependenceExplainer(MercuryExplainer):
     """
-    This explainer will calculate the partial dependences for a ML model.
+    This explainer will calculate the partial dependencies for a ML model.
     Also contains a distributed (pyspark) implementation which
     allows PySpark transformers/pipelines to be explained via PD.
 
@@ -46,7 +46,7 @@ class PartialDependenceExplainer(MercuryExplainer):
         # You can also pass anything as long as it is callable and receives the predictors (e.g. my_fitted_model.predict / predict_proba).
         >>> explainer = PartialDependenceExplainer(my_fitted_model.predict)
         >>> explanation = explainer.explain(features)
-        # Plot a summary of partial dependences for all the features.
+        # Plot a summary of partial dependencies for all the features.
         >>> explanation.plot()
         # Plot the partial dependence of a single variable.
         >>> fig, ax = plt.subplots()
@@ -59,7 +59,7 @@ class PartialDependenceExplainer(MercuryExplainer):
         >>> def my_pred_fn(data):
         ...     temp_df = assembler.transform(data)
         ...     return my_transformer.transform(temp_df)
-        # We can tell the explainer not to calculate  partial dependences for certain features. This will save time.
+        # We can tell the explainer not to calculate  partial dependencies for certain features. This will save time.
         >>> features_to_ignore = ['FEATURE_4', 'FEATURE_88']
         # We pass our custom inference function and also, tell the explainer which column will hold the transformer's output (necessary only when explaining pyspark models).
         >>> explainer = PartialDependenceExplainer(my_pred_fn, output_col='probability')
@@ -93,7 +93,7 @@ class PartialDependenceExplainer(MercuryExplainer):
             ignore_feats: TP.List[str] = None,
             categoricals: TP.List[str] = None)->PartialDependenceExplanation:
         """
-        This method will compute the partial dependences for a ML model.
+        This method will compute the partial dependencies for a ML model.
         This explainer also contains a distributed (pyspark) implementation which
         allows PySpark transformers/pipelines to be explained via PD.
 
@@ -123,14 +123,14 @@ class PartialDependenceExplainer(MercuryExplainer):
 
         feat_names = [f for f in list(features.columns) if f not in set(ignore_feats)]
 
-        dependences = partial_dep_impl(features, feat_names, categoricals)
+        dependencies = partial_dep_impl(features, feat_names, categoricals)
 
-        return PartialDependenceExplanation(dependences)
+        return PartialDependenceExplanation(dependencies)
 
     def __base_impl(self, features:pd.DataFrame, feat_names:list, categoricals:set)->dict:
         """
         Contains the logic for the base implementation, i.e. the  one
-        which uses np.ndarrays/pd.DataFrames and undistributed models.
+        which uses np.ndarray/pd.DataFrame and undistributed models.
 
         Args:
             features (pd.DataFrame): pandas.DataFrame with ONLY the predictors.
@@ -140,7 +140,7 @@ class PartialDependenceExplainer(MercuryExplainer):
                 Set with the feature names that will be forced to be categorical.
 
         Returns:
-            Dictionary with the partial dependences of each selected feature
+            Dictionary with the partial dependencies of each selected feature
             and whether that feature is categorical or not.
         """
         data = {}
@@ -197,7 +197,7 @@ class PartialDependenceExplainer(MercuryExplainer):
                 Set with the feature names that will be forced to be categorical.
 
         Returns:
-            Dictionary with the partial dependences of each selected feature
+            Dictionary with the partial dependencies of each selected feature
             and whether that feature is categorical or not.
         """
         from pyspark.sql.functions import col
@@ -293,7 +293,7 @@ class PartialDependenceExplainer(MercuryExplainer):
             grid: TP.Union[list, "np.array"],
             is_categorical:bool = False)->"np.ndarray":
         """ Helper method for the PySpark implementation (distributed models).
-        Computes the partial dependences of one feature given its type (categorical or not)
+        Computes the partial dependencies of one feature given its type (categorical or not)
         """
         from pyspark.ml.stat import Summarizer
         from pyspark.sql.functions import col
@@ -315,7 +315,7 @@ class PartialDependenceExplainer(MercuryExplainer):
                 mean_preds.append(temp_df.agg(Summarizer.mean(col(self.output_col))).collect()[0][0].values.tolist())
 
                 if self.compute_quantiles:
-                    # Tricky to calculate quantiles as Spark doesnt support this for Vector
+                    # Tricky to calculate quantiles as Spark doesn't support this for Vector
                     def _to_cols(row):
                         return tuple(row["probability"].toArray().tolist())
 
