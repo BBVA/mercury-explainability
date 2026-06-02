@@ -3,14 +3,108 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from mercury.explainability import PartialDependenceExplainer
+from sklearn.datasets import fetch_california_housing, load_iris
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 
 from pyspark.ml import Pipeline
+import pyspark.ml.regression as pysparkreg
+import pyspark.ml.classification as pysparkclas
 from pyspark.ml.feature import StringIndexer, VectorAssembler
+from pyspark.sql import SparkSession
 from pyspark.sql.functions import when, col
 
 import pytest
 
 pytestmark = pytest.mark.usefixtures("model_and_data_pdp")
+
+
+@pytest.fixture(scope="module")
+def model_and_data_pdp():
+    houses = fetch_california_housing()
+    iris = load_iris()
+
+    houses_pd_df = pd.DataFrame(houses['data'], columns=houses['feature_names'])
+    houses_pd_df['target'] = houses['target']
+    iris_pd_df = pd.DataFrame(iris['data'], columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
+    iris_pd_df['target'] = iris['target']
+    boston_pd_df = pd.read_csv("tests/explainability/model_and_data/boston.csv")
+
+    rf_iris_sk = RandomForestClassifier().fit(
+        iris_pd_df[['sepal_length', 'sepal_width', 'petal_length', 'petal_width']],
+        iris_pd_df['target'],
+    )
+    rf_houses_sk = RandomForestRegressor().fit(
+        houses_pd_df[['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']],
+        houses_pd_df['target'],
+    )
+    rf_boston_sk = RandomForestRegressor().fit(
+        boston_pd_df[['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT']],
+        boston_pd_df['target'],
+    )
+
+    spark_sess = None
+    iris_sp_df = None
+    houses_sp_df = None
+    boston_sp_df = None
+    rf_iris_sp = None
+    assembler_iris = None
+    rf_houses_sp = None
+    assembler_houses = None
+    assembler_boston = None
+    rf_boston_sp = None
+
+    try:
+        spark_sess = SparkSession.builder.master("local[2]").appName("pdp-tests").getOrCreate()
+        houses_sp_df = spark_sess.createDataFrame(houses_pd_df)
+        iris_sp_df = spark_sess.createDataFrame(iris_pd_df)
+        boston_sp_df = spark_sess.createDataFrame(boston_pd_df)
+
+        assembler_iris = VectorAssembler(
+            inputCols=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'],
+            outputCol='features',
+        )
+        iris_sp_df_temp = assembler_iris.transform(iris_sp_df)
+        rf_iris_sp = pysparkclas.RandomForestClassifier(featuresCol="features", labelCol="target").fit(iris_sp_df_temp)
+
+        assembler_houses = VectorAssembler(
+            inputCols=['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude'],
+            outputCol='features',
+        )
+        houses_sp_df_temp = assembler_houses.transform(houses_sp_df)
+        rf_houses_sp = pysparkreg.RandomForestRegressor(featuresCol="features", labelCol="target").fit(houses_sp_df_temp)
+
+        assembler_boston = VectorAssembler(
+            inputCols=['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT'],
+            outputCol='features',
+        )
+        boston_sp_df_temp = assembler_boston.transform(boston_sp_df)
+        rf_boston_sp = pysparkreg.RandomForestRegressor(featuresCol='features', labelCol='target').fit(boston_sp_df_temp)
+    except Exception:
+        pass
+
+    return {
+        'spark_sess': spark_sess,
+        'iris_pd_df': iris_pd_df.loc[:, ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']],
+        'houses_pd_df': houses_pd_df.loc[:, ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']],
+        'boston_pd_df': boston_pd_df.loc[:, ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT']],
+        'iris_sp_df': iris_sp_df.drop("target") if iris_sp_df is not None else None,
+        'houses_sp_df': houses_sp_df.drop("target") if houses_sp_df is not None else None,
+        'boston_sp_df': boston_sp_df.drop("target") if boston_sp_df is not None else None,
+        'rf_iris_sk': rf_iris_sk,
+        'rf_houses_sk': rf_houses_sk,
+        'rf_boston_sk': rf_boston_sk,
+        'rf_iris_sp': rf_iris_sp,
+        'assembler_iris': assembler_iris,
+        'rf_houses_sp': rf_houses_sp,
+        'assembler_houses': assembler_houses,
+        'assembler_boston': assembler_boston,
+        'rf_boston_sp': rf_boston_sp,
+    }
+
+
+def _require_spark(model_and_data_pdp):
+    if model_and_data_pdp['spark_sess'] is None:
+        pytest.skip("PySpark partial dependence tests require a working Spark/Java runtime")
 
 
 def test_pandas_classification(model_and_data_pdp):
@@ -32,7 +126,7 @@ def test_pandas_classification(model_and_data_pdp):
     assert return_dict[list(return_dict.keys())[0]]['lower_quantile'].shape[1] == 3
     assert return_dict[list(return_dict.keys())[0]]['upper_quantile'].shape[1] == 3
 
-    # # Check plotting doesnt crash
+    # # Check plotting doesn't crash
     # explanation.plot()
 
 
@@ -56,7 +150,7 @@ def test_pandas_regression(model_and_data_pdp):
     assert len(return_dict[list(return_dict.keys())[0]]['lower_quantile'].shape) == 1
     assert len(return_dict[list(return_dict.keys())[0]]['upper_quantile'].shape) == 1
 
-    # # Check plotting doesnt crash
+    # # Check plotting doesn't crash
     # explanation.plot()
 
 
@@ -71,11 +165,12 @@ def test_pandas_regression_with_categoricals(model_and_data_pdp):
 
     assert len(return_dict['NOX']['values']) == 50
 
-    # # Check plotting doesnt crash
+    # # Check plotting doesn't crash
     # explanation.plot()
 
 
 def test_spark_classification(model_and_data_pdp):
+    _require_spark(model_and_data_pdp)
     rf = model_and_data_pdp['rf_iris_sp']
     assembler = model_and_data_pdp['assembler_iris']
     features = model_and_data_pdp['iris_sp_df']
@@ -99,11 +194,12 @@ def test_spark_classification(model_and_data_pdp):
     assert return_dict[list(return_dict.keys())[0]]['lower_quantile'].shape[1] == 3
     assert return_dict[list(return_dict.keys())[0]]['upper_quantile'].shape[1] == 3
 
-    # # Check plotting doesnt crash
+    # # Check plotting doesn't crash
     # explanation.plot(filter_classes=[True, False, True], quantiles=[True, False, True])
 
 
 def test_spark_regression(model_and_data_pdp):
+    _require_spark(model_and_data_pdp)
     rf = model_and_data_pdp['rf_houses_sp']
     assembler = model_and_data_pdp['assembler_houses']
     features = model_and_data_pdp['houses_sp_df']
@@ -127,6 +223,7 @@ def test_spark_regression(model_and_data_pdp):
 
 
 def test_spark_regression_with_categorical(model_and_data_pdp):
+    _require_spark(model_and_data_pdp)
     rf = model_and_data_pdp['rf_boston_sp']
     assembler = model_and_data_pdp['assembler_boston']
     features = model_and_data_pdp['boston_sp_df']
@@ -167,7 +264,7 @@ def test_spark_regression_with_categorical(model_and_data_pdp):
     # Assert integrity of categorical string variables
     assert type(explanation.data['AGE']['values'][0]) == str
 
-    # # Check plotting doesnt crash
+    # # Check plotting doesn't crash
     # explanation.plot(quantiles=False)
 
 
@@ -183,5 +280,9 @@ def test_explanation_plot(model_and_data_pdp):
     explanation.plot_single('CRIM', ax=ax)
     assert ax.get_title() == 'CRIM'
 
-    # # Check that plotting doesnt crash
+    # # Check that plotting doesn't crash
     # explanation.plot(quantiles=True)
+
+
+if __name__ == "__main__":
+	pytest.main([__file__])

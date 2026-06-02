@@ -170,7 +170,7 @@ class SimulatedAnnealing(Strategy, Annealer):
             self.steps = kwargs['steps']
             self.updates = self.steps
             # self.updates = 100
-        sol, p = self.anneal()  # type: TP.Tuple['np.ndarray', float]
+        sol, p = self.anneal()
         return sol, p, np.array(self.explored), np.array(self.energies)
 
     def update(self, *args, **kwargs) -> None:

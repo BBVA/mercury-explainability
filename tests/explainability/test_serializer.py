@@ -21,6 +21,7 @@ def model_and_data_anchors():
         'explain_data': explain_data
     }
 
+
 @pytest.fixture(scope='session')
 def model_and_data_ale():
     logRegModel = pickle.load(open('./tests/explainability/model_and_data/FICO_lr_model.pkl', 'rb'))
@@ -30,7 +31,6 @@ def model_and_data_ale():
         'data': fit_data,
     }
 
-pytestmark = pytest.mark.usefixtures("model_and_data")
 
 def test_serializer_explainer(model_and_data_anchors):
     """
@@ -41,7 +41,7 @@ def test_serializer_explainer(model_and_data_anchors):
     fit_data = model_and_data_anchors['fit_data']
     explain_data = model_and_data_anchors['explain_data']
     feature_names = list(explain_data.columns)
-    
+
     TEST_FILE = "/tmp/explainer.pkl"
 
     anchorsExtendedExplainer = AnchorsWithImportanceExplainer(
@@ -55,8 +55,9 @@ def test_serializer_explainer(model_and_data_anchors):
     anchorsExtendedExplainer_recovered = MercuryExplainer.load(TEST_FILE)
     assert type(anchorsExtendedExplainer_recovered) ==\
          AnchorsWithImportanceExplainer, "Bad load"
-    
+
     os.remove(TEST_FILE)
+
 
 def test_serializer_anchors_with_importance_explainer(model_and_data_anchors):
 
@@ -84,6 +85,7 @@ def test_serializer_anchors_with_importance_explainer(model_and_data_anchors):
 
     os.remove(TEST_FILE)
 
+
 def test_serializer_ale_explainer(model_and_data_ale):
 
     model = model_and_data_ale['logRegModel']
@@ -99,13 +101,17 @@ def test_serializer_ale_explainer(model_and_data_ale):
     explainer.save(TEST_FILE)
 
     explainer_loaded = MercuryExplainer.load(TEST_FILE)
-    isinstance(explainer_loaded, ALEExplainer)
+    assert isinstance(explainer_loaded, ALEExplainer)
 
     # Check explanations
     explanation = explainer.explain(data_pd[features])
     explanation_loaded = explainer_loaded.explain(data_pd[features])
 
-    for i in range(len(explanation.data)):
+    for i in range(len(explanation.data['ale_values'])):
         assert np.all(explanation.data['ale_values'][i] == explanation_loaded.data['ale_values'][i])
 
     os.remove(TEST_FILE)
+
+
+if __name__ == "__main__":
+	pytest.main([__file__])

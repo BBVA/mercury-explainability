@@ -23,7 +23,7 @@ class MercuryExplainer(ABC):
     @classmethod
     def load(self, filename: str = "explainer.pkl"):
         """
-        Loads a previosly saved explainer with its internal state to a file.
+        Loads a previously saved explainer with its internal state to a file.
 
         Args:
             filename (str): Path where the explainer is stored

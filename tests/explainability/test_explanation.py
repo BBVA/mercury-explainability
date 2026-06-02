@@ -89,3 +89,7 @@ class ExplanationTest(unittest.TestCase):
                 np.array([1.1, 1.2, 1.5, 1.8, 2.]),         # explored
                 np.array([0.6, 0.3, 0.45, 0.1, 0.]),        # explored_ps
                 labels=['a', 'b'])                          # labels
+
+
+if __name__ == "__main__":
+    unittest.main(__file__)

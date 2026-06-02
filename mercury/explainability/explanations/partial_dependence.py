@@ -39,7 +39,7 @@ class PartialDependenceExplanation():
                 List of bool with the classes to plot. If None, all classes will be plotted. Ignored if the target variable
                 is not categorical.
         """
-        # If user pass a single bool and prediction data is a multinomial, we conver the
+        # If user pass a single bool and prediction data is a multinomial, we convert the
         # single boolean to a mask array to only plot the quantile range over the selected
         # classes.
         if len(self.data[var_name]['preds'].shape)>=2:
@@ -159,7 +159,7 @@ class PartialDependenceExplanation():
 
     def plot(self, ncols:int = 1, figsize:tuple = (15,15), quantiles:TP.Union[bool, list] = False, filter_classes:list = None, **kwargs):
         """
-        Plots a summary of all the partial dependences.
+        Plots a summary of all the partial dependencies.
 
         Args:
             ncols (int):

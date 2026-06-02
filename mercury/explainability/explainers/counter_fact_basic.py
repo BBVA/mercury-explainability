@@ -97,7 +97,7 @@ class CounterFactualExplainerBasic(MercuryExplainer):
                 keep_explored_points: bool = True,
                 **kwargs) -> CounterfactualBasicExplanation:
         """
-        Roll the panellet down the valley and find an explanation.
+        Find an explanation.
 
         Args:
             from_ ('np.ndarray'):
