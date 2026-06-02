@@ -8,7 +8,6 @@ import pytest
 
 
 class CounterfactualBasicTest(unittest.TestCase):
-    """Simple checks on Panellet."""
 
     # The 2D-Rosenbrock function à la classifier output
     def _rosenbrock(self, x: "np.ndarray", a: int = 1, b: int = 100) -> "np.ndarray":
@@ -84,8 +83,8 @@ class CounterfactualBasicTest(unittest.TestCase):
         pan = CounterFactualExplainerBasic(
             df_data, self._rosenbrock
         )
-        pan.explain(np_data[0], 0.1, 
-            class_idx=0, 
+        pan.explain(np_data[0], 0.1,
+            class_idx=0,
             bounds=np.array([[0, 9], [0, 9]]),
             strategy="simanneal")
 
@@ -99,7 +98,7 @@ class CounterfactualBasicTest(unittest.TestCase):
     def test_data_constructor_invalid_labels(self):
         df_data = pd.DataFrame(data={"a": [-10, 10], "b": [-10, 10]})
         np_data = np.array([[-10, -10], [10, 10]])
-        # this shold give no error
+        # this should give no error
         CounterFactualExplainerBasic(df_data, self._rosenbrock)
         with self.assertRaises(AssertionError):
             # Labels/bounds shape does not match
@@ -128,3 +127,20 @@ class CounterfactualBasicTest(unittest.TestCase):
         assert (pan.kernel == np.array([1.0, 0.])).all()
         assert (pan.step == np.array([0.2, 0.])).all()
         assert explanation.get_changes()[1] == 0
+
+    def test_bound_update_branches_and_custom_bounds_override(self):
+        # Use invalid strategy so we execute bound-update code paths but skip expensive optimization.
+        np_data = np.array([[0.0, 0.0], [1.0, 1.0]])
+        pan = CounterFactualExplainerBasic(
+            np_data, self._rosenbrock, labels=["a", "b"]
+        )
+
+        from_ = np.array([-1.0, 2.0])
+        custom_bounds = np.array([[-2.0, 0.0], [1.0, 3.0]])
+
+        with self.assertRaises(ValueError):
+            pan.explain(from_, 0.1, bounds=custom_bounds, strategy="meh")
+
+
+if __name__ == "__main__":
+    pytest.main(__file__)

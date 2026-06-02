@@ -80,7 +80,7 @@ class ALEExplainer(Explainer, MercuryExplainer):
 
         X = X[features].values
 
-        # TODO: use joblib to paralelise?
+        # TODO: use joblib to parallelize?
         for feature, feat_name in enumerate(self.feature_names):
             if feat_name not in ignore_features:
                 q, ale, a0 = ale_num(

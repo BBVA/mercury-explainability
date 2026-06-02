@@ -1,5 +1,6 @@
-## Latest version 1.1.4
+## Latest version 1.2.3
 
 | Release  | Date | Main feature(s) |
 | -------- | ---- | --------------- |
+| 1.2.3 | 2026/06/02 | General maintenance: Updates support for latest versions, updates c code to modern Cython, fixes pipeline, adds coverage, improves documentation, improves testing. New feature: MonotonicityExplainer |
 | 1.1.4 | 2025/03/25 | Implements create_tutorials(), minor fixes, adds support for python 3.12, improves documentation. |

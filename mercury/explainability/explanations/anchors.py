@@ -30,18 +30,18 @@ class AnchorsWithImportanceExplanation(object):
 
     def interpret_explanations(self, n_important_features: int) -> str:
         """
-        This method prints a report of the important features obtaiend.
+        This method prints a report of the important features obtained.
 
         Args:
             n_important_features:
-                The number of imporant features that will appear in the report.
+                The number of important features that will appear in the report.
                 Defaults to 3.
         """
         names = []
-        explanations_found = [explan for explan in self.explanations if not isinstance(explan, str)]
-        for expl in explanations_found:
-            for name in expl.data['anchor']:
-                # split without an argument splits by spaces, and in every item in expl['names']
+        explanations_found = [e for e in self.explanations if not isinstance(e, str)]
+        for e in explanations_found:
+            for name in e.data['anchor']:
+                # split without an argument splits by spaces, and in every item in e['names']
                 # the first word refers to the feature name.
                 if (
                     (' = ' in name) or
@@ -68,6 +68,6 @@ class AnchorsWithImportanceExplanation(object):
                 print_values.append([', ',unique_name, ' with a frequency of ',
                     str(count_name), ' (', str(100 * count_name / len(explanations_found)), '%) '])
         n_explanations += 1
-        interptretation = ''.join(list(itertools.chain(*print_values)))
-        print(interptretation)
-        return interptretation
+        interpretation = ''.join(list(itertools.chain(*print_values)))
+        print(interpretation)
+        return interpretation

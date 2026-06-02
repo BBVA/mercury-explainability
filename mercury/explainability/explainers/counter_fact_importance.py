@@ -88,9 +88,9 @@ class CounterFactualExplainerBase(ABC):
             if min_prob >= counter_proba:
                 raise AttributeError("""
                 The objective class probability is larger than that of the counterfactual passed to this method.
-                This means that either the target probability is greater than that stablished when calling the
+                This means that either the target probability is greater than that established when calling the
                 counterfactual method or that the counterfactual being passed to this method is not well formed.
-                The inputed target_probability was {:.3f} while the obtained probability for this counterfactual is {:.3f}
+                The input target_probability was {:.3f} while the obtained probability for this counterfactual is {:.3f}
                 """.format(min_prob, counter_proba))
         except AttributeError:
             raise
@@ -340,7 +340,7 @@ class CounterfactualExplainer(CounterFactualExplainerBase):
             Target class for the counterfactual to reach, one of 'other', 'same' or an integer denoting
             desired class membership for the counterfactual instance
         max_iter:
-            Maximum number of interations to run the gradient descent for (inner loop)
+            Maximum number of interactions to run the gradient descent for (inner loop)
         early_stop:
             Number of steps after which to terminate gradient descent if all or none of found instances are solutions
         lam_init:

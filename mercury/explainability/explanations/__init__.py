@@ -1,5 +1,7 @@
 from .anchors import AnchorsWithImportanceExplanation
-from .counter_factual import (
-    CounterfactualBasicExplanation,
-    CounterfactualWithImportanceExplanation
-)
+from .clustering_tree_explanation import ClusteringTreeExplanation
+from .counter_factual import CounterfactualBasicExplanation
+from .counter_factual import CounterfactualWithImportanceExplanation
+from .monotonicity import MonotonicityExplanation
+from .partial_dependence import PartialDependenceExplanation
+from .shuffle_importance import FeatureImportanceExplanation

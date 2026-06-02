@@ -13,12 +13,12 @@ class ShuffleImportanceExplainer(MercuryExplainer):
     This explainer estimates the feature importance of each predictor for a
     given black-box model. The used strategy consists on random shuffling one
     variable at a time and, on each step, checking how much a particular
-    metric worses. The features which make the model to perform the worst are
+    metric worsens. The features which make the model to perform the worst are
     the most important ones.
 
     Args:
         eval_fn (Callable):
-            Custom evaluation function. It will recieve a DataFrame with features and
+            Custom evaluation function. It will receive a DataFrame with features and
             a Numpy array with the target outputs for each instance. It must
             implement an inference process and return a metric to score the model
             performance on the given data. This metric must be real numbered.
@@ -26,7 +26,7 @@ class ShuffleImportanceExplainer(MercuryExplainer):
             and we use the parameter `normalize=True` (default option), then it is
             recommended to return the negative of that metric in `eval_fn` to make
             the results more intuitive.
-            In the case of Pyspark explanations, the function will only recieve
+            In the case of Pyspark explanations, the function will only receive
             a PySpark in the first argument already containing the target column,
             whereas the second argument will be None.
         normalize (bool):
@@ -99,7 +99,7 @@ class ShuffleImportanceExplainer(MercuryExplainer):
         if hasattr(type(predictors), 'toPandas'):
             if type(target) != str:
                 raise ValueError("""If predictors is a Spark DataFrame, target should be the name \
-                                 of the tareget column (a str)""")
+                                 of the target column (a str)""")
             implementation = self.__impl_pyspark
             feature_names = list(filter(lambda x: x!=target, predictors.columns))
             if len(feature_names) == len(predictors.columns):

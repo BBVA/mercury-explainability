@@ -17,42 +17,56 @@ from mercury.explainability.explainers.shuffle_importance import ShuffleImportan
 
 @pytest.fixture(scope="session")
 def model_and_data():
-    spark_sess = SparkSession.builder.config("k1", "v1").getOrCreate()
-
     houses = fetch_california_housing()
     houses_pd_df = pd.DataFrame(houses['data'], columns=houses['feature_names'])
     houses_pd_df['target'] = houses['target']
-    houses_sp_df = spark_sess.createDataFrame(houses_pd_df)
 
     # Fit sklearn RFs
     rf_houses_sk = RandomForestRegressor().fit(houses_pd_df[['MedInc', 'HouseAge',
         'AveRooms', 'AveBedrms', 'Population', 'AveOccup','Latitude', 'Longitude']],
         houses_pd_df['target'])
 
-    # Fit Spark RFs
-    assembler_houses = VectorAssembler(
+    spark_sess = None
+    houses_sp_df = None
+    rf_houses_sp = None
+    assembler_houses = None
+
+    try:
+        spark_sess = SparkSession.builder.config("k1", "v1").getOrCreate()
+        houses_sp_df = spark_sess.createDataFrame(houses_pd_df)
+
+        # Fit Spark RFs
+        assembler_houses = VectorAssembler(
             inputCols=['MedInc','HouseAge','AveRooms','AveBedrms','Population','AveOccup','Latitude','Longitude'],
             outputCol='features')
-    houses_sp_df_temp = assembler_houses.transform(houses_sp_df)
-    rf_houses_sp = pysparkreg.RandomForestRegressor(
-        featuresCol="features",
-        labelCol="target"
-    ).fit(houses_sp_df_temp)
+        houses_sp_df_temp = assembler_houses.transform(houses_sp_df)
+        rf_houses_sp = pysparkreg.RandomForestRegressor(
+            featuresCol="features",
+            labelCol="target"
+        ).fit(houses_sp_df_temp)
+    except Exception:
+        pass
 
     return {
         'spark_sess': spark_sess,
         'houses_pd_df': houses_pd_df,
-        'houses_sp_df': houses_sp_df.drop("features"),
+        'houses_sp_df': houses_sp_df.drop("features") if houses_sp_df is not None and "features" in houses_sp_df.columns else houses_sp_df,
         'rf_houses_sk': rf_houses_sk,
         'rf_houses_sp': rf_houses_sp,
         'assembler_houses': assembler_houses
     }
 
 
+def _require_spark(model_and_data):
+    if model_and_data['spark_sess'] is None:
+        pytest.skip("PySpark tests require a working Spark/Java runtime")
+
+
 pytestmark = pytest.mark.usefixtures("model_and_data")
 
 
 def test_importance_pyspark_target_doesnt_exist(model_and_data):
+    _require_spark(model_and_data)
     rf = model_and_data['rf_houses_sp']
     assembler = model_and_data['assembler_houses']
     features = model_and_data['houses_sp_df']
@@ -72,6 +86,7 @@ def test_importance_pyspark_target_doesnt_exist(model_and_data):
 
 
 def test_importance_pyspark_target_exists(model_and_data):
+    _require_spark(model_and_data)
     rf = model_and_data['rf_houses_sp']
     assembler = model_and_data['assembler_houses']
     features = model_and_data['houses_sp_df']
@@ -96,6 +111,7 @@ def test_importance_pyspark_target_exists(model_and_data):
     assert len(ax.get_yaxis().get_ticklabels()) == len(feat_names)
 
 def test_importance_pyspark_with_categoricals(model_and_data):
+    _require_spark(model_and_data)
     assembler = model_and_data['assembler_houses']
     features = model_and_data['houses_sp_df']
     evaluator = RegressionEvaluator(predictionCol="prediction", labelCol='target')
@@ -130,6 +146,7 @@ def test_importance_pyspark_with_categoricals(model_and_data):
 
 
 def test_importance_pyspark_bad_input(model_and_data):
+    _require_spark(model_and_data)
     rf = model_and_data['rf_houses_sp']
     assembler = model_and_data['assembler_houses']
     features = model_and_data['houses_sp_df']
@@ -207,3 +224,6 @@ def test_importance_pandas_bug_target_col_not_filtered(model_and_data):
 
     assert 'target' not in features
 
+
+if __name__ == "__main__":
+    pytest.main([__file__])
