@@ -20,7 +20,7 @@ jobs:
           pip install build
       - name: Build package
         run: |
-          python -m build
+          python -m build --sdist
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
