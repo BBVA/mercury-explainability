@@ -1,4 +1,4 @@
-name: PyPi Upload
+name: Upload Python Package
 
 on:
   release:
@@ -18,12 +18,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install wheel
           pip install build
-          pip install numpy
-      - name: Build packages
+      - name: Build package
         run: |
-          python setup.py sdist
+          python -m build --sdist
       - name: Publish package
-        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: ${{ secrets.pypi_user }}
           password: ${{ secrets.pypi_password }}
